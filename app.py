@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pydeck as pdk
 import requests
 import streamlit as st
@@ -6,8 +8,14 @@ API_URL = st.secrets["API_URL"]
 
 
 def ask_user_() -> dict[str, str]:
-    pickup_datetime = st.text_input(
-        "Pickup date and time (UTC)", "2013-07-06 17:18:00 UTC"
+    """_summary_
+
+    Returns:
+        dict[str, str]: _description_
+    """
+    pickup_datetime = st.datetime_input(
+        "Pickup date and time (UTC)",
+        datetime(2009, 11, 19, 16, 45),
     )
     pickup_longitude = st.number_input(
         "Pickup longitude", value=-73.950655, format="%.6f"
@@ -35,6 +43,17 @@ def ask_user_() -> dict[str, str]:
 def get_route_(
     pickup_lon: float, pickup_lat: float, dropoff_lon: float, dropoff_lat: float
 ) -> dict | list:
+    """_summary_
+
+    Args:
+        pickup_lon (float): _description_
+        pickup_lat (float): _description_
+        dropoff_lon (float): _description_
+        dropoff_lat (float): _description_
+
+    Returns:
+        dict | list: _description_
+    """
     url = (
         f"https://router.project-osrm.org/route/v1/driving/"
         f"{pickup_lon},{pickup_lat};{dropoff_lon},{dropoff_lat}"
@@ -68,6 +87,11 @@ def main() -> None:
 
 
 def draw_map_(params: dict) -> None:
+    """_summary_
+
+    Args:
+        params (dict): _description_
+    """
     response = requests.get(f"{API_URL}/predict", params=params, timeout=10)
     response.raise_for_status()
     fare = float(response.json()["fare"])
