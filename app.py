@@ -3,7 +3,7 @@ import os
 import requests
 import streamlit as st
 
-API_URL = os.environ["API_URL"]
+API_URL = st.secrets["API_URL"]
 
 st.title("NYC Taxi Fare")
 
